@@ -1,17 +1,33 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import HeartIcon from "../components/HeartIcon/heartIcon.js";
 import Confetti from "react-confetti";
 
 export default function SuccessPage({ successPath }) {
-  const [windowWidth, windowHeight] = [window.innerWidth, window.innerHeight];
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
-  // console.log("successPath", successPath);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   let successText = "";
   let showHomeButton = false;
   let showMyProfileButton = false;
   let showViewTaskButton = false;
   let showMyTasksButton = false;
   let showBrowseTasksButton = false;
+
 
   if (successPath === "created") {
     successText =
@@ -35,7 +51,12 @@ export default function SuccessPage({ successPath }) {
 
   return (
     <div className="success">
-      <Confetti width={windowWidth.width} height={windowHeight.height} />
+      <Confetti width={windowSize.width} height={windowSize.height} />
+      <Confetti
+  friction={1.}
+  
+/>
+
       <h1 className="success-text"> {successText}</h1>
 
       <HeartIcon />
